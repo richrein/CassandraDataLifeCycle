@@ -1,0 +1,194 @@
+
+ccm remove dsa_cassdata_lifecycle
+
+ccm create dsa_cassdata_lifecycle -v 2.1.11
+Current cluster is now: dsa_cassdata_lifecycle
+
+ccm populate -n 3
+
+ccm start
+
+ccm node1 nodetool status
+Datacenter: datacenter1
+=======================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address    Load       Tokens  Owns (effective)  Host ID                               Rack
+UN  127.0.0.1  46.67 KB   1       66.7%             b20cf1dc-fbf5-4759-9f53-d3aade346efd  rack1
+UN  127.0.0.2  46.67 KB   1       66.7%             d1ffcffa-ba61-469e-9a7b-8a313011b7e4  rack1
+UN  127.0.0.3  46.67 KB   1       66.7%             6a21d042-7355-41af-9175-d515f356b5ad  rack1
+
+
+create KEYSPACE dsa_lifecycle WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 1} ;
+use dsa_lifecycle ;
+
+create TABLE timeseries (device_id text, metric text, window timestamp, time timestamp, value float, PRIMARY KEY ((device_id, metric, window), time)) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev01', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 76.3 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev01', 'temp', '2015-10-20+00:00', '2015-10-20 01:59:02+0000', 76.3 ) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev02', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 76.4 ) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 01:59:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 02:00:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 02:01:02+0000', 79.6 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 02:02:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 02:03:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev03', 'temp', '2015-10-20+00:00', '2015-10-20 02:04:02+0000', 79.3 ) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev04', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 77.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev04', 'temp', '2015-10-20+00:00', '2015-10-20 01:59:02+0000', 77.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev04', 'temp', '2015-10-20+00:00', '2015-10-20 02:00:02+0000', 77.6 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev04', 'temp', '2015-10-20+00:00', '2015-10-20 02:01:02+0000', 77.5 ) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 01:59:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 02:00:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 02:01:02+0000', 79.6 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 02:02:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 02:03:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev33', 'temp', '2015-10-20+00:00', '2015-10-20 02:04:02+0000', 79.3 ) ;
+
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 01:58:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 01:59:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 02:00:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 02:01:02+0000', 79.6 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 02:02:02+0000', 79.5 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 02:03:02+0000', 79.4 ) ;
+INSERT INTO timeseries (device_id, metric, window, time, value) VALUES ( 'dev88', 'temp', '2015-10-20+00:00', '2015-10-20 02:04:02+0000', 79.3 ) ;
+
+
+
+SELECT * FROM timeseries ;
+
+ device_id | metric | window                   | time                     | value
+-----------+--------+--------------------------+--------------------------+-------
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+     dev01 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  76.3
+     dev01 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  76.3
+     dev02 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  76.4
+     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  77.4
+     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  77.5
+     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  77.6
+     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  77.5
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+
+
+
+select token(device_id, metric, window), device_id, metric, window, time, value FROM timeseries ;
+
+ token(device_id, metric, window) | device_id | metric | window                   | time                     | value
+----------------------------------+-----------+--------+--------------------------+--------------------------+-------
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+             -3490265952459326831 |     dev33 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+              -610423771624391511 |     dev03 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+              -569636305177558133 |     dev01 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  76.3
+              -569636305177558133 |     dev01 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  76.3
+               587423821327492641 |     dev02 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  76.4
+              2272322280259072443 |     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  77.4
+              2272322280259072443 |     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  77.5
+              2272322280259072443 |     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  77.6
+              2272322280259072443 |     dev04 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  77.5
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:58:02+0000 |  79.4
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 01:59:02+0000 |  79.5
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:00:02+0000 |  79.5
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:01:02+0000 |  79.6
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:02:02+0000 |  79.5
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:03:02+0000 |  79.4
+              7805890708182978523 |     dev88 |   temp | 2015-10-20 00:00:00+0000 | 2015-10-20 02:04:02+0000 |  79.3
+
+
+ccm node1 nodetool ring
+Datacenter: datacenter1
+==========
+Address    Rack        Status State   Load            Owns                Token                                       
+                                                                          3074457345618258602                         
+127.0.0.1  rack1       Up     Normal  46.67 KB        66.67%              -9223372036854775808                        
+127.0.0.2  rack1       Up     Normal  46.67 KB        66.67%              -3074457345618258603                        
+127.0.0.3  rack1       Up     Normal  46.67 KB        66.67%              3074457345618258602                         
+
+
+
+ccm node1 flush
+ccm node2 flush
+ccm node3 flush
+
+$ ll ~/.ccm/dsa_cassdata_lifecycle/node{1,2,3}/data/dsa_lifecycle/timeseries-*/*Data.db
+-rw-r--r--  1 richrein  staff  324 Oct 19 20:54 /Users/richrein/.ccm/dsa_cassdata_lifecycle/node1/data/dsa_lifecycle/timeseries-6d89825076d811e5b33937c18304e19b/dsa_lifecycle-timeseries-ka-1-Data.db
+-rw-r--r--  1 richrein  staff  458 Oct 19 20:43 /Users/richrein/.ccm/dsa_cassdata_lifecycle/node3/data/dsa_lifecycle/timeseries-6d89825076d811e5b33937c18304e19b/dsa_lifecycle-timeseries-ka-1-Data.db
+-rw-r--r--  1 richrein  staff  296 Oct 19 20:54 /Users/richrein/.ccm/dsa_cassdata_lifecycle/node3/data/dsa_lifecycle/timeseries-6d89825076d811e5b33937c18304e19b/dsa_lifecycle-timeseries-ka-2-Data.db
+
+
+ccm add -i 127.0.0.4 -j 7090 -n -100000000000000000  node4
+ccm node4 start
+
+$ ccm node1 nodetool status
+Datacenter: datacenter1
+=======================
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address    Load       Tokens  Owns    Host ID                               Rack
+UN  127.0.0.1  106.39 KB  1       ?       b20cf1dc-fbf5-4759-9f53-d3aade346efd  rack1
+UN  127.0.0.2  101.59 KB  1       ?       d1ffcffa-ba61-469e-9a7b-8a313011b7e4  rack1
+UN  127.0.0.3  106.36 KB  1       ?       6a21d042-7355-41af-9175-d515f356b5ad  rack1
+UN  127.0.0.4  46.59 KB   1       ?       d14de1b7-f11a-4ada-8617-20ed5f8731f3  rack1
+
+$ ccm node1 nodetool ring
+Datacenter: datacenter1
+==========
+Address    Rack        Status State   Load            Owns                Token                                       
+                                                                          3074457345618258602                         
+127.0.0.1  rack1       Up     Normal  106.39 KB       ?                   -9223372036854775808                        
+127.0.0.2  rack1       Up     Normal  111.26 KB       ?                   -3074457345618258603                        
+127.0.0.4  rack1       Up     Normal  83.55 KB        ?                   -100000000000000000                         
+127.0.0.3  rack1       Up     Normal  111.25 KB       ?                   3074457345618258602                         
+
+
+
+
+
+
+
+Timestamp tips 
++00:00 sets time zone of data
+'now'
+'10 September 2000'
+'+1 day'
+'+1 week'
+'+1 week 2 days 4 hours 2 seconds'
+'next Thursday'
+'last Monday'
+'first day of +1 month'
+
+
